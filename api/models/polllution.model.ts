@@ -1,7 +1,7 @@
 import { DataTypes, Sequelize } from "sequelize";
 
 export const pollutionModel = (sequelize: Sequelize) => {
-  return sequelize.define("pollution", {
+  return sequelize.define("pollutions", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
