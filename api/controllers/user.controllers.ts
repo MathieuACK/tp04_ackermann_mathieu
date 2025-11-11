@@ -22,6 +22,20 @@ export async function create(req: Request, res: Response) {
   };
 
   if (user.login && user.password && user.lastname && user.firstname) {
+    // Check if login already exists
+    const existing = await db.users
+      .findOne({ where: { login: user.login } })
+      .catch((err: Error) => {
+        // DB error
+        res.status(500).send({ message: "Database error", error: err });
+      });
+
+    if (existing) {
+      return res
+        .status(409)
+        .send({ message: "User with this login already exists" });
+    }
+
     return db.users.create(user).then((data) => {
       res.send(data);
     });
