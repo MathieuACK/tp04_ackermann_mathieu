@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, map, catchError, of } from 'rxjs';
 import { UsersService } from '../users/users.service';
 import { User } from '../../models/users';
 
@@ -25,6 +25,23 @@ export class AuthService {
           return true;
         }
         return false;
+      })
+    );
+  }
+
+  public signup(user: Partial<User>): Observable<boolean> {
+    return this.usersService.addUser(user).pipe(
+      map((created) => {
+        if (created) {
+          this.currentUser$.next(created as User);
+          localStorage.setItem('currentUser', JSON.stringify(created));
+          return true;
+        }
+        return false;
+      }),
+      catchError((err) => {
+        // return false on error (e.g., 409 conflict)
+        return of(false);
       })
     );
   }
