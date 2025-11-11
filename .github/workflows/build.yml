@@ -50,22 +50,6 @@ jobs:
             type=sha
             type=ref,event=branch
 
-      - name: Prepare build args from .env
-        id: buildargs
-        # Read api/.env and expose its lines as a single multiline output `build_args`
-        run: |
-          if [ -f api/.env ]; then
-            echo "Preparing build args from api/.env"
-            echo "build_args<<EOF" >> $GITHUB_OUTPUT
-            # Skip empty lines and comments
-            grep -v '^\s*$' api/.env | grep -v '^\s*#' >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
-          else
-            echo "build_args<<EOF" >> $GITHUB_OUTPUT
-            echo "" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
-          fi
-
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
@@ -74,7 +58,6 @@ jobs:
           platforms: linux/amd64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: ${{ steps.buildargs.outputs.build_args }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
