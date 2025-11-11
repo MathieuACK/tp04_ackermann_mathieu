@@ -22,6 +22,7 @@ ENV NODE_ENV=${NODE_ENV}
 
 # Copy only production dependencies and the built artifacts
 COPY ./api/package*.json ./
+COPY ./api/.env /.env
 RUN npm ci --only=production
 
 # Copy compiled output from builder
