@@ -20,7 +20,7 @@ npm install
 Créez un fichier `.env` à la racine avec :
 
 ```env
-PORT=3000
+PORT=<your_port>
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=your_password
